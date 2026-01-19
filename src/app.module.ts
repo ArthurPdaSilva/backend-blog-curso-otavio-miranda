@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
+import { TypeOrmModule } from '@nestjs/typeorm'
 import { AuthModule } from './auth/auth.module'
 import { PostModule } from './post/post.module'
 import { UserModule } from './user/user.module'
@@ -15,8 +14,14 @@ import { UserModule } from './user/user.module'
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    TypeOrmModule.forRoot({
+      type: 'better-sqlite3',
+      database: process.env.DB_DATABASE || './db.sqlite',
+      synchronize: process.env.DB_SYNCHRONIZE === '1',
+      autoLoadEntities: process.env.DB_AUTO_LOAD_ENTITIES === '1',
+    }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
