@@ -1,17 +1,15 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
-  Param,
   Patch,
   Post,
   Req,
   UseGuards,
 } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
 import type { AuthenticatedRequest } from 'src/auth/types/authenticated-request'
-import { CustomParseIntPipe } from 'src/common/pipers/custom-parse-int-pipe.pipe'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdatePasswordDto } from './dto/update-password.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
@@ -21,22 +19,36 @@ import { UserService } from './user.service'
 @Controller('user')
 export class UserController {
   constructor(
-    private readonly configService: ConfigService,
+    // private readonly configService: ConfigService,
     private readonly userService: UserService,
   ) {}
 
   // Guard para autenticação com jwt
   // @UseGuards(AuthGuard('jwt'))
   // Minha personalização
+  // @UseGuards(JwtAuthGuard)
+  // @Get(':id')
+  // findOne(
+  //   @Req() req: AuthenticatedRequest,
+  //   @Param('id', CustomParseIntPipe) id: number,
+  // ) {
+  //   console.log(req.user)
+  //   console.log(this.configService.get('TESTE', 'Padrão'))
+  //   return `Ola, eu tenho o ${id} do tipo: ${typeof id}`
+  // }
+
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  findOne(
-    @Req() req: AuthenticatedRequest,
-    @Param('id', CustomParseIntPipe) id: number,
-  ) {
-    console.log(req.user)
-    console.log(this.configService.get('TESTE', 'Padrão'))
-    return `Ola, eu tenho o ${id} do tipo: ${typeof id}`
+  @Get('me')
+  async findOne(@Req() req: AuthenticatedRequest) {
+    const user = await this.userService.findOneByOrFail({ id: req.user.id })
+    return new UserResponseDto(user)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('me')
+  async remove(@Req() req: AuthenticatedRequest) {
+    const user = await this.userService.remove(req.user.id)
+    return new UserResponseDto(user)
   }
 
   // Tive q passar para async pq to traduzindo o dto para respons

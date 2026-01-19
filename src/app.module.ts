@@ -18,7 +18,9 @@ import { UserModule } from './user/user.module'
       type: 'better-sqlite3',
       database: process.env.DB_DATABASE || './db.sqlite',
       synchronize: process.env.DB_SYNCHRONIZE === '1',
+      // Ele tenta carregar todas as entidades por demanda
       autoLoadEntities: process.env.DB_AUTO_LOAD_ENTITIES === '1',
+      // Alternativa para autoLoad: entities: [User, Post]
     }),
   ],
   controllers: [],
