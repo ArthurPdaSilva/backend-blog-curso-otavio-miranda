@@ -1,7 +1,16 @@
 @baseUrl = http://localhost:3000
 
-GET {{baseUrl}}
 ###
-
-
+# @name authLogin
 POST  {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "user@gmail.com",
+    "password": "123456",
+    "chave-malvada": "Malvada"
+}
+
+###
+# @name readOneUser
+GET  {{baseUrl}}/user/123
