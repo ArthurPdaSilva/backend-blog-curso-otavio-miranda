@@ -33,6 +33,7 @@ export class AuthService {
       sub: user.id,
       email: user.email,
     }
+
     const accessToken = await this.jwtService.signAsync(jwtPayload)
 
     // ForceLogout é para bloquear o user quando necessário. Caso ele perca o token de acesso para um hacker, podemos usar essa variável para impedir q o agente malicioso fique fazendo requests até o token expirar
