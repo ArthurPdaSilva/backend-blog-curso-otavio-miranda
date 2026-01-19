@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:3000
+@baseUrl = http://localhost:3001
 @jwtToken = {{authLogin.response.body.accessToken}}
 
 @postUuid = {{createPostOwned.response.body.id}}
@@ -17,6 +17,7 @@
 # @name authLogin
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
+Origin: http://localhost:3000
 
 {
   "email": "{{userEmailForTesting}}",

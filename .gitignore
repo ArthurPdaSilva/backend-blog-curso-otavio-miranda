@@ -14,6 +14,8 @@ lerna-debug.log*
 
 db.sqlite
 
+uploads
+
 # OS
 .DS_Store
 
